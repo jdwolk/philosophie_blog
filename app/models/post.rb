@@ -28,10 +28,13 @@ module PostTransitions
   
 end
 
+
 class Post < ActiveRecord::Base
+  extend FriendlyId
   include PostTransitions
 
-  attr_accessible :body, :published_at, :slug, :title
+  attr_accessible :body, :state, :published_at, :title, :slug
+  friendly_id :title, use: [:slugged, :history]
 
   def state
     super.try :to_sym
@@ -41,7 +44,7 @@ class Post < ActiveRecord::Base
     super(value.to_sym)
     state 
   end
- 
+
   validates :title, :presence => true 
   validates :body,  :presence => true
   validates :state, :presence => true,
