@@ -64,7 +64,12 @@ class PostsController < ApplicationController
   end
 
   def create
+    #TODO refactor!
+    tags = params[:post]["tag"]["tags"]
+    params[:post].delete("tag")
+    params[:post]["tags"] = tags.split(' ').map {|t| Tag.create!(:t_val=>t)}
     @post = Post.new(params[:post])
+
     save_and_return_to_edit_index(@post)
   end
 
