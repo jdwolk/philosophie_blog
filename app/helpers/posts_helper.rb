@@ -8,6 +8,7 @@ module PostsHelper
   end
 
   def markdown_help(text, *new_options)
+    #TODO refactor using zipmap, take *new_options
     options = {:hard_wrap         => true,
                :autolink          => true,
                :filter_html       => true,

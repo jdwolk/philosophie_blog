@@ -1,6 +1,15 @@
 class PostsController < ApplicationController
 
   def index
+    common_index 
+  end
+
+  def edit_index
+    # Succint index view for private editing
+    common_index
+  end
+
+  def common_index
     @posts = Post.all
 
     respond_to do |format|
