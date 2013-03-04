@@ -1,16 +1,6 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>State:</b>
-  <%= @post.state %>
-</p>
-
-<p>
-  <b>Body:</b>
-  <%= @post.body %>
-</p>
-
-<p>
   <b>Title:</b>
   <%= @post.title %>
 </p>
@@ -21,8 +11,8 @@
 </p>
 
 <p>
-  <b>Slug:</b>
-  <%= @post.slug %>
+  <b>Body:</b>
+  <%= markdown(@post.body) %>
 </p>
 
 
