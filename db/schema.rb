@@ -14,13 +14,13 @@
 ActiveRecord::Schema.define(:version => 20130303222128) do
 
   create_table "posts", :force => true do |t|
-    t.string   "state"
-    t.text     "body"
-    t.string   "title"
+    t.string   "state",        :default => "draft"
+    t.text     "body",                              :null => false
+    t.string   "title",                             :null => false
     t.datetime "published_at"
     t.string   "slug"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
 
 end

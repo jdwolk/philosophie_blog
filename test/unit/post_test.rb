@@ -4,7 +4,7 @@ include PostTransitions
 class PostTest < ActiveSupport::TestCase
   def test_all_states_gives_tossed_for_trash_action
     expected = :tossed
-    PostTransitions.states.each do |s|
+    @@states.each do |s|
       assert_equal(expected, PostTransitions.transition(s, :trash))
     end
   end
@@ -30,6 +30,13 @@ class PostTest < ActiveSupport::TestCase
   test "in completed, edit action" do
     expected = :draft
     actual   = PostTransitions.transition(:completed, :edit)
+    assert_equal expected, actual
+  end
+
+  test "calling mixin methods from Post" do
+    p = Post.new  # starts as :draft
+    expected = :draft
+    actual   = p.transition(:draft, :save)
     assert_equal expected, actual
   end
 
