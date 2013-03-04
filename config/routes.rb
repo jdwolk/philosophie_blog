@@ -2,7 +2,12 @@ PhilosophieBlog::Application.routes.draw do
 
   resources :posts do
     collection do
-      match 'edit_index'
+      match 'edit_index',  :as => :edit_index
+      match 'publish/:id', :action => :publish, :as => :publish
+      match 'done/:id', :action => :done, :as => :done
+      match 'unpublish/:id', :action => :unpublish, :as => :unpublish
+      match 'trash/:id', :action => :trash, :as => :trash
+      match 'restore/:id', :action => :restore, :as => :restore
     end
   end
 

@@ -1,16 +1,14 @@
 module PostTransitions
   extend self  # Allows for private in-module methods
 
-  @@transitions = {:draft     => {:save       => :draft,
-                                  :done       => :completed,
+  @@transitions = {:draft     => {:done       => :completed,
                                   :trash      => :tossed},
                    :completed => {:publish    => :published,
                                   :edit       => :draft,
                                   :trash      => :tossed},
                    :published => {:unpublish  => :completed,
                                   :trash      => :tossed},
-                   :tossed    => {:restore    => :draft,
-                                  :trash      => :tossed}}
+                   :tossed    => {:restore    => :draft}}
   @@states = @@transitions.keys
   @@actions = [:save, :done, :trash, :publish, :unpublish, :edit, :restore]
 
@@ -20,6 +18,10 @@ module PostTransitions
 
   def good_action?(action)
     @@actions.member?(action)
+  end
+
+  def next_options(state)
+    @@transitions[state].keys
   end
 
   def transition(state, action)
@@ -57,6 +59,10 @@ class Post < ActiveRecord::Base
     else
       puts "Either action " + action + " or state " + self.state.to_s + " were invalid"
     end
+  end
+
+  def next_states
+    next_options(self.state)
   end
 
 end

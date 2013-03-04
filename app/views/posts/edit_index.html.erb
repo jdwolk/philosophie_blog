@@ -5,7 +5,7 @@
     <th>Title</th>
     <th>Body</th>
     <th>State</th>
-    <th>Published at</th>
+    <!-- <th>Published at</th> -->
     <th></th>
     <th></th>
     <th></th>
@@ -16,10 +16,21 @@
     <td><%= post.title %></td>
     <td><%= truncate(post.body, :length => 25) %></td>
     <td><%= post.state %></td>
-    <td><%= post.published_at %></td>
-    <td><%= link_to 'Show', post %></td>
-    <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <!-- <td><%= post.published_at %></td> -->
+
+    <td>
+      <% post.next_states.each do |s| %>
+        <%= link_to s.to_s.titleize, :action => s, :id => post.id %>
+      <% end %>
+    </td>
+
+    <!-- <#% if post.state == :completed %> -->
+    <!-- <#%= link_to 'Publish', :action => :publish, :id => post.id %>-->
+
+
+    <!--<td><#%= link_to 'Show', post %></td> -->
+    <!-- <td><#%= link_to 'Edit', edit_post_path(post) %></td> -->
+    <!-- <td><#%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
   </tr>
 <% end %>
 </table>
