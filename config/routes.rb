@@ -1,5 +1,7 @@
 PhilosophieBlog::Application.routes.draw do
 
+  devise_for :users
+
   resources :posts do
     collection do
       match 'edit_index',  :as => :edit_index

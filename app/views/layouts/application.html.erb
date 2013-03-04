@@ -7,8 +7,25 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <header>
+    <!--<#%= link_to "hiii #{image_tag(yourimagepath)}", root_url %>-->
+    <%= link_to "<h1>JD Wolk's Philosophie Blog</h1>", root_url %>
 
-<%= yield %>
+    <nav id="user_nav">
+        <ul>
+            <% if user_signed_in? %>
+                <li>Editor <%= current_user.email %></li>
+                <li><%= link_to "sign out", destroy_user_session_path, :method => :delete %></li>
+            <% else %>
+                <li><%= link_to "sign in", new_user_session_path %></li>
+            <% end %>
+        </ul>
+    </nav>
+  </header>
+
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
+  <%= yield %>
 
 </body>
 </html>

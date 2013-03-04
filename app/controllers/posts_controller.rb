@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  before_filter :authenticate_user!, :only => [:edit_index, :publish, :unpublish, :trash, :restore, :done]
 
   def index
     # Only show posts with a "published" state
