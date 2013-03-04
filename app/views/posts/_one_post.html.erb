@@ -1,0 +1,15 @@
+
+<article>
+  <h3><%= link_to one_post.title, one_post %></h3>
+  <h6>
+    <% localtime = one_post.published_at %>
+    <%= localtime.strftime("Published on %m/%d/%Y") %>
+    <%= localtime.strftime("at %I:%M%p") %>
+  </h6>
+  <div class="row">
+    <div class="large-6 columns">
+      <%= one_post.body %>
+    </div>
+  </div>
+</article>
+

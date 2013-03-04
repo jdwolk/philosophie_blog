@@ -1,11 +1,12 @@
-<h1>Edit Posts</h1>
+<h2>Edit Posts</h2>
 
 <table>
   <tr>
     <th>Title</th>
     <th>Body</th>
+    <th>Published At</th>
     <th>State</th>
-    <!-- <th>Published at</th> -->
+    <th>Actions</th>
     <th></th>
     <th></th>
     <th></th>
@@ -13,8 +14,15 @@
 
 <% @posts.each do |post| %>
   <tr>
-    <td><%= post.title %></td>
-    <td><%= truncate(post.body, :length => 25) %></td>
+    <td><%= link_to post.title, post %></td>
+    <td><%= link_to truncate(post.body, :length => 25), post %></td>
+    <td>
+      <% if post.published_at %>
+        <%= post.published_at.strftime("%m/%d/%Y") %>
+      <% else %>
+        /
+      <% end %>
+    </td>
     <td><%= post.state %></td>
     <!-- <td><%= post.published_at %></td> -->
 

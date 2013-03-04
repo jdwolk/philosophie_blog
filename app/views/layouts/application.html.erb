@@ -1,31 +1,75 @@
 <!DOCTYPE html>
-<html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7 ]> <html class="ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
 <head>
-  <title>PhilosophieBlog</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
+    <meta charset="utf-8" />
+    <!-- Uncomment to make IE8 render like IE7 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=7" /> -->
+
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title><%= content_for?(:title) ? yield(:title) : "Blag" %></title>
+
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/custom.modernizr" %>
+    <%= csrf_meta_tags %>
 </head>
 <body>
-  <header>
-    <!--<#%= link_to "hiii #{image_tag(yourimagepath)}", root_url %>-->
-    <%= link_to "<h1>JD Wolk's Philosophie Blog</h1>", root_url %>
+    <header>
 
-    <nav id="user_nav">
-        <ul>
+      <!-- Nav Bar -->
+
+      <div class="row">
+        <div class="large-12 columns">
+          <nav class="nav-bar right">
             <% if user_signed_in? %>
-                <li>Editor <%= current_user.email %></li>
-                <li><%= link_to "sign out", destroy_user_session_path, :method => :delete %></li>
+              <ul class="button-group">
+                <li><%= link_to "published", root_path, :class => "button" %></li>
+                <li><%= link_to "all", edit_index_posts_path, :class => "button" %></li>
+                <li><%= link_to "new", new_post_path, :class => "button" %></li>
+                <li><%= link_to "sign out", destroy_user_session_path, :method => :delete, :class => "button" %></li>
+              </ul>
             <% else %>
-                <li><%= link_to "sign in", new_user_session_path %></li>
+                <%= link_to "sign in", new_user_session_path %>
             <% end %>
-        </ul>
-    </nav>
-  </header>
+          </nav>
 
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
-  <%= yield %>
+          <h1>
+            <%= link_to "Blag", root_url %>
+            <small>Rails Challenge</small>
+          </h1>
+          <hr />
+        </div>
+      </div>
 
+      <!-- End Nav -->
+
+    </header>
+    
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    <%= yield %>
+  
+    <%= javascript_include_tag "application" %>
+
+    <!-- Footer -->
+ 
+    <footer class="row">
+      <div class="large-12 columns">
+        <hr />
+        <div class="row">
+          <div class="large-6 columns">
+            <p>Copyright Jordaniel Wolk &copy;2013</p>
+          </div>
+          <div class="large-6 columns">
+        </div>
+      </div>
+    </div>
+  </footer> 
 </body>
 </html>

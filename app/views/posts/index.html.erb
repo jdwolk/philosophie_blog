@@ -1,25 +1,42 @@
-<h1>Current posts</h1>
+ 
+<!-- Main Page Content and Sidebar -->
+ 
+<div class="row">
+ 
+  <!-- Main Blog Content -->
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Published at</th>
-    <th>Body</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+  <div class="large-9 columns" role="content">
+    <% @posts.each do |post| %>
+      <%= render :partial => "one_post", :locals => { :one_post => post } %>
+      <hr />
+    <% end %>
+  </div>
 
-<% @posts.each do |post| %>
-  <tr>
-    <td><%= link_to post.title, post %></td>
-    <td><%= post.published_at %></td>
-    <td><%= link_to truncate(post.body, :length => 25), post %></td>
-    <td><%= link_to 'Show', post %></td>
-  </tr>
-<% end %>
-</table>
+  <!-- End Main Content -->
+ 
+  <!-- Sidebar -->
 
-<br />
+  <aside class="large-3 columns">
+    <h5>Tags</h5>
+    <ul class="side-nav">
+      <li><a href="#">News</a></li>
+      <li><a href="#">Code</a></li>
+      <li><a href="#">Design</a></li>
+      <li><a href="#">Fun</a></li>
+      <li><a href="#">Weasels</a></li>
+    </ul>
 
-<%= link_to 'New Post', new_post_path %>
+    <!-- 
+    <div class="panel">
+      <h5>Featured</h5>
+    </div>
+    -->
+
+  </aside>
+
+  <!-- End Sidebar -->
+
+</div>
+
+<!-- End Main Content and Sidebar -->
+ 

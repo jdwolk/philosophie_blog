@@ -3,7 +3,7 @@ class PostsController < ApplicationController
 
   def index
     # Only show posts with a "published" state
-    @posts = Post.where(:state => :published).order(:published_at)
+    @posts = Post.where(:state => :published).order(:published_at).reverse_order
 
     respond_to do |format|
       format.html # index.html.erb

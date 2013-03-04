@@ -1,20 +1,8 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Title:</b>
-  <%= @post.title %>
-</p>
+<%= render :partial => "one_post", :locals => { :one_post => @post } %>
 
-<p>
-  <b>Published at:</b>
-  <%= @post.published_at %>
-</p>
-
-<p>
-  <b>Body:</b>
-  <%= markdown(@post.body) %>
-</p>
-
-
-<%= link_to 'Edit', edit_post_path(@post) %> |
+<% if user_signed_in? %>
+  <%= link_to 'Edit', edit_post_path(@post) %> |
+<% end %>
 <%= link_to 'Back', posts_path %>
