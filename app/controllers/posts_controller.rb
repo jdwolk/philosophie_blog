@@ -2,7 +2,7 @@ class PostsController < ApplicationController
 
   def index
     # Only show posts with a "published" state
-    @posts = Post.where(:state => :published)
+    @posts = Post.where(:state => :published).order(:published_at)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -12,7 +12,7 @@ class PostsController < ApplicationController
 
   def edit_index
     # Succint index view for private editing
-    @posts = Post.all
+    @posts = Post.order("state")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -94,6 +94,7 @@ class PostsController < ApplicationController
 
     # state == :completed
     @post.transition!(:publish)
+    @post.published_at = Time.now 
     save_and_return_to_edit_index(@post)
   end
 
@@ -102,6 +103,7 @@ class PostsController < ApplicationController
 
     # state == :published
     @post.transition!(:unpublish)
+    @post.published_at = nil
     save_and_return_to_edit_index(@post)
   end
 
