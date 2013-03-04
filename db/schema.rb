@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130304080538) do
+ActiveRecord::Schema.define(:version => 20130304115318) do
 
   create_table "friendly_id_slugs", :force => true do |t|
     t.string   "slug",                         :null => false
@@ -35,6 +35,13 @@ ActiveRecord::Schema.define(:version => 20130304080538) do
   end
 
   add_index "posts", ["slug"], :name => "index_posts_on_slug"
+
+  create_table "tags", :force => true do |t|
+    t.string   "t_val",      :null => false
+    t.integer  "post_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

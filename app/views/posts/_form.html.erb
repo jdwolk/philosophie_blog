@@ -19,6 +19,16 @@
     <%= f.label :body %><br />
     <%= f.text_area :body %>
   </div>
+
+  <%= f.fields_for "tag" do |tag_fields| %>
+    <% tag_vals = @post.tags.map {|t| t.t_val }.join(' ') %>
+    <div class="field">
+      <%= tag_fields.label :tags %><br />
+      <%= tag_fields.text_field :tags, :value => tag_vals %>
+    </div>
+  <% end %>
+
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

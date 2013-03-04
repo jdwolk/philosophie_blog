@@ -1,15 +1,26 @@
 
 <article>
   <h3><%= link_to one_post.title, one_post %></h3>
-  <h6>
-    <% localtime = one_post.published_at %>
-    <%= localtime.strftime("Published on %m/%d/%Y") %>
-    <%= localtime.strftime("at %I:%M%p") %>
-  </h6>
+  
+  <% if one_post.published_at %>
+    <h6>
+      <% localtime = one_post.published_at %>
+      <%= localtime.strftime("Published on %m/%d/%Y") %>
+      <%= localtime.strftime("at %I:%M%p") %>
+    </h6>
+  <% end %>
   <div class="row">
-    <div class="large-6 columns">
+    <div class="large-8 columns">
       <%= one_post.body %>
+      <br /><br />
+      <ul class="inline-list">
+        <li><small><strong>tags:</strong></small></li>
+        <% one_post.tags.each do |t| %>
+          <li><small><%= t.t_val %></small></li>
+        <% end %>
+      </ul>
     </div>
+    <!--<ul class="inline-list left small">-->
   </div>
 </article>
 

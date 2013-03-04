@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_filter :authenticate_user!, :only => [:edit_index, :publish, :unpublish, :trash, :restore, :done]
+  attr_accessor :filter_state
 
   def index
     # Only show posts with a "published" state
@@ -13,12 +14,26 @@ class PostsController < ApplicationController
 
   def edit_index
     # Succint index view for private editing
-    @posts = Post.order("state")
+    if flash[:state_filter]
+      puts 'STATE_FILTER in EDIT: ' + flash[:state_filter].to_s
+      @posts = Post.where(:state => flash[:state_filter].to_sym)
+    else
+      @posts = Post.order("state")
+    end
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @posts }
     end
+  end
+
+  def filter_edit_index
+    # For getting a subset of the edit_index
+    puts "$$$$$$$$$$$ Params: " + params.to_s
+    filter_state = params["post"]["state"]
+    puts "FILTER STATE: " + filter_state
+
+    redirect_to edit_index_posts_path, :flash => {:state_filter => filter_state}
   end
 
   def show
@@ -48,24 +63,18 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
   end
 
-
   def create
     @post = Post.new(params[:post])
     save_and_return_to_edit_index(@post)
-
-#    respond_to do |format|
-      #if @post.save
-        #format.html { redirect_to @post, notice: 'Post was successfully created.' }
-        #format.json { render json: @post, status: :created, location: @post }
-      #else
-        #format.html { render action: "new" }
-        #format.json { render json: @post.errors, status: :unprocessable_entity }
-      #end
-    #end
   end
 
   def update
     @post = Post.find(params[:id])
+
+    #TODO make prettier
+    tags = params[:post]["tag"]["tags"]
+    params[:post].delete("tag")
+    params[:post]["tags"] = tags.split(' ').map {|t| Tag.create!(:t_val=>t)}
 
     respond_to do |format|
       if @post.update_attributes(params[:post])

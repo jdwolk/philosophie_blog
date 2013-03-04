@@ -35,8 +35,10 @@ class Post < ActiveRecord::Base
   extend FriendlyId
   include PostTransitions
 
-  attr_accessible :body, :state, :published_at, :title, :slug
+  attr_accessible :body, :state, :published_at, :title, :tags, :slug
   friendly_id :title, use: [:slugged, :history]
+  has_many :tags
+  accepts_nested_attributes_for :tags, :allow_destroy => true
 
   def state
     super.try :to_sym

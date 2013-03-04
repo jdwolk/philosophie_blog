@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <%= render :partial => "one_post", :locals => { :one_post => @post } %>
-
+<br />
 <% if user_signed_in? %>
   <%= link_to 'Edit', edit_post_path(@post) %> |
 <% end %>

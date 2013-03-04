@@ -1,5 +1,10 @@
 <h2>Edit Posts</h2>
 
+<%= form_for :post, :url => {:action => "filter_edit_index"} do |post| %>
+  <div>filter posts by: <%= select(:post, :state, [["draft", :draft], ['completed', :completed], ['published', :published], ['tossed', :tossed]]) %></div>
+  <%= submit_tag "Go" %>
+<% end %>
+
 <table>
   <tr>
     <th>Title</th>
@@ -31,18 +36,10 @@
         <%= link_to s.to_s.titleize, :action => s, :id => post.id %>
       <% end %>
     </td>
-
-    <!-- <#% if post.state == :completed %> -->
-    <!-- <#%= link_to 'Publish', :action => :publish, :id => post.id %>-->
-
-
-    <!--<td><#%= link_to 'Show', post %></td> -->
-    <!-- <td><#%= link_to 'Edit', edit_post_path(post) %></td> -->
-    <!-- <td><#%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Post', new_post_path %>
+<%= link_to 'New Post', new_post_path, :class => 'button' %>
