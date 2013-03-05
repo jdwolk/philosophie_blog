@@ -1,8 +1,10 @@
 <h2>Edit Posts</h2>
 
 <%= form_for :post, :url => {:action => "filter_edit_index"} do |post| %>
-  <div>filter posts by: <%= select(:post, :state, [["draft", :draft], ['completed', :completed], ['published', :published], ['tossed', :tossed]]) %></div>
-  <%= submit_tag "Go" %>
+  <div>filter posts by:
+    <%= select(:post, :state, [["draft", :draft],['completed', :completed], ['published', :published], ['tossed', :tossed]]) %>
+  </div>
+  <%= submit_tag "Go", :class => "button" %>
 <% end %>
 
 <table>
@@ -21,6 +23,7 @@
   <tr>
     <td><%= link_to post.title, post %></td>
     <td><%= link_to truncate(post.body, :length => 25), post %></td>
+
     <td>
       <% if post.published_at %>
         <%= post.published_at.strftime("%m/%d/%Y") %>
@@ -29,7 +32,6 @@
       <% end %>
     </td>
     <td><%= post.state %></td>
-    <!-- <td><%= post.published_at %></td> -->
 
     <td>
       <% post.next_states.each do |s| %>
