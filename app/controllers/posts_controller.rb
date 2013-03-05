@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
-  before_filter :authenticate_user!, :only => [:edit_index, :publish, :unpublish, :trash, :restore, :done]
+  before_filter :authenticate_user!,
+    :only => [:edit_index, :publish, :unpublish, :trash, :restore, :done]
   attr_accessor :filter_state
 
   def index
@@ -15,7 +16,6 @@ class PostsController < ApplicationController
   def edit_index
     # Succint index view for private editing
     if flash[:state_filter]
-      puts 'STATE_FILTER in EDIT: ' + flash[:state_filter].to_s
       @posts = Post.where(:state => flash[:state_filter].to_sym)
     else
       @posts = Post.order("state")
@@ -29,11 +29,10 @@ class PostsController < ApplicationController
 
   def filter_edit_index
     # For getting a subset of the edit_index
-    puts "$$$$$$$$$$$ Params: " + params.to_s
-    filter_state = params["post"]["state"]
-    puts "FILTER STATE: " + filter_state
+    state_filter = params["post"]["state"]
 
-    redirect_to edit_index_posts_path, :flash => {:state_filter => filter_state}
+    redirect_to edit_index_posts_path,
+      :flash => {:state_filter => state_filter}
   end
 
   def show
@@ -64,30 +63,24 @@ class PostsController < ApplicationController
   end
 
   def create
-    #TODO refactor!
-    tags = params[:post]["tag"]["tags"]
-    params[:post].delete("tag")
-    params[:post]["tags"] = tags.split(' ').map {|t| Tag.create!(:t_val=>t)}
+    normalize_and_create_tags! params[:post]
     @post = Post.new(params[:post])
-
     save_and_return_to_edit_index(@post)
   end
 
   def update
+    normalize_and_create_tags! params[:post]
     @post = Post.find(params[:id])
-
-    #TODO make prettier
-    tags = params[:post]["tag"]["tags"]
-    params[:post].delete("tag")
-    params[:post]["tags"] = tags.split(' ').map {|t| Tag.create!(:t_val=>t)}
 
     respond_to do |format|
       if @post.update_attributes(params[:post])
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
+        format.html { redirect_to @post,
+                      notice: 'Post was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.json { render json: @post.errors,
+                      status: :unprocessable_entity }
       end
     end
   end
@@ -105,61 +98,62 @@ class PostsController < ApplicationController
   #### State transition actions ####
 
   def publish
-    @post = Post.find(params[:id])
-
-    # state == :completed
-    @post.transition!(:publish)
-    @post.published_at = Time.now 
-    save_and_return_to_edit_index(@post)
+    transition_action(:publish) do |post|
+      post.transition!(:publish)
+      post.published_at = Time.now
+      post
+    end
   end
 
   def unpublish
-    @post = Post.find(params[:id])
-
-    # state == :published
-    @post.transition!(:unpublish)
-    @post.published_at = nil
-    save_and_return_to_edit_index(@post)
+    transition_action(:unpublish) do |post|
+      post.transition!(:unpublish)
+      post.published_at = nil
+      post
+    end
   end
-
-  def trash
-    @post = Post.find(params[:id])
-
-    @post.transition!(:trash)
-    save_and_return_to_edit_index(@post)
+ 
+  [:save, :done, :trash, :restore].each do |action|
+    define_method action.to_s do
+      transition_action(action) do |post|
+        post.transition!(action)
+        post
+      end
+    end
   end
-
-  def restore 
-    @post = Post.find(params[:id])
-
-    # state == :tossed
-    @post.transition!(:restore)
-    save_and_return_to_edit_index(@post)
-  end
-
-  def done
-    @post = Post.find(params[:id])
-
-    # state == :draft
-    @post.transition!(:done)
-    save_and_return_to_edit_index(@post)
-  end
-
 
   private
 
+  def normalize_and_create_tags!(post_fields)
+    created_tags = create_tags(post_fields)
+    post_fields.delete("tag")
+    post_fields["tags"] = created_tags
+    post_fields
+  end
+
+  def create_tags(post_fields)
+    tags = post_fields["tag"]["tags"]
+    tags.split(' ').map {|t| Tag.create!(:t_val => t)}
+  end
+
+  def transition_action(action, &blk)
+    # No view associated, so don't need @
+    post = Post.find(params[:id])
+    changed_post = block_given? ? yield(post) : post
+    save_and_return_to_edit_index(changed_post)
+  end 
+  
   def save_and_return_to_edit_index(post)
     respond_to do |format|
       if post.save
-        #format.html { redirect_to post, notice: 'Post was successfully updated.' }
-        #format.json { render json: post, status: :created, location: post }
-        format.html { redirect_to :action => "edit_index", notice: 'Post was successfully updated.' }
+        format.html { redirect_to :action => "edit_index",
+                      notice: 'Post was successfully updated.' }
       else
         format.html { render action: "edit_index" }
-        format.json { render json: post.errors, status: :unprocessable_entity }
+        format.json { render json: post.errors,
+                      status: :unprocessable_entity }
       end
     end
-
     @post = post
   end
 
